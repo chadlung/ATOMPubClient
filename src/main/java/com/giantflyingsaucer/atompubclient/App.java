@@ -8,12 +8,10 @@ import java.util.Date;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Feed;
-import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
+import org.apache.abdera.protocol.client.RequestOptions;
 
 public class App {
 
@@ -31,16 +29,11 @@ public class App {
         entry.setContent("Hello World");
         report("The Entry to Post", entry.toString());
 
-        Document<Entry> doc = abderaClient.post("http://localhost:9002/employee", entry).getDocument();
-        report("The Created Entry", doc.getRoot().toString());
-        
-        ClientResponse resp = abderaClient.get("http://localhost:9002/employee");
-        if (resp.getType() == ResponseType.SUCCESS) {
-            Document<Feed> docFeed = resp.getDocument();
-            report("The Returned Feed", docFeed.getRoot().toString());
-        } else {
-          // Error
-        }        
+        RequestOptions opts = new RequestOptions();
+        opts.setContentType("application/atom+xml;type=entry");
+
+        ClientResponse resp = abderaClient.post("http://localhost:9002/employee", entry, opts);
+        report("HTTP STATUS CODE", resp.getStatusText());
     }
 
     private static void report(String title, String message) {
