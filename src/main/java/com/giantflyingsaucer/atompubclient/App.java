@@ -33,7 +33,7 @@ public class App {
         opts.setContentType("application/atom+xml;type=entry");
 
         ClientResponse resp = abderaClient.post("http://localhost:9002/employee", entry, opts);
-        report("HTTP STATUS CODE", resp.getStatusText());
+        report("HTTP STATUS TEXT", resp.getStatusText());
     }
 
     private static void report(String title, String message) {
